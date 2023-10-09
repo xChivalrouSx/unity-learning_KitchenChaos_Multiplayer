@@ -41,8 +41,8 @@ GameObject:
   m_Component:
   - component: {fileID: 7001906783533281223}
   - component: {fileID: -6314818663436029351}
-  - component: {fileID: 6395067252273632136}
   - component: {fileID: 5988522368435828826}
+  - component: {fileID: -3622062474640015534}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -87,7 +87,7 @@ MonoBehaviour:
   SpawnWithObservers: 1
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
---- !u!114 &6395067252273632136
+--- !u!114 &5988522368435828826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -96,7 +96,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 2098397011311195778}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 430c06c8e93c4014da70edf43c8df8ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveSpeed: 5
+  gameInput: {fileID: 0}
+  counterLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  kitchenObjectHoldPoint: {fileID: 4904980624456089051}
+--- !u!114 &-3622062474640015534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2098397011311195778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8be13b5b00df9a24bbaf2d8717cecf8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -117,24 +135,6 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   SlerpPosition: 0
---- !u!114 &5988522368435828826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2098397011311195778}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 430c06c8e93c4014da70edf43c8df8ae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  gameInput: {fileID: 0}
-  counterLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  kitchenObjectHoldPoint: {fileID: 4904980624456089051}
 --- !u!1001 &9131004155694782320
 PrefabInstance:
   m_ObjectHideFlags: 0

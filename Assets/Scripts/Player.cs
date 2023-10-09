@@ -58,6 +58,9 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
             return;
         }
 
+        // --- Added for Server Auth
+        // HandeMovementServerAuth();
+
         HandleMovement();
         HandleInteractions();
     }
@@ -95,6 +98,49 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         {
             SetSelectedCounter(null);
         }
+    }
+
+    private void HandeMovementServerAuth()
+    {
+        Vector3 movementDirectory = GameInput.Instance.GetMovementVectorNormalized();
+        HandleMovementServerRpc(movementDirectory);
+    }
+
+    [ServerRpc]
+    private void HandleMovementServerRpc(Vector3 movementDirectory)
+    {
+        float moveDistance = moveSpeed * Time.deltaTime;
+        float playerRadius = 0.7f;
+        float playerHeight = 2f;
+        bool canMove = !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectory, moveDistance);
+        if (!canMove)
+        {
+            Vector3 movementDirectoryX = new Vector3(movementDirectory.x, 0, 0).normalized;
+            canMove = movementDirectory.x != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectoryX, moveDistance);
+
+            if (canMove)
+            {
+                movementDirectory = movementDirectoryX;
+            }
+            else
+            {
+                Vector3 movementDirectoryZ = new Vector3(0, 0, movementDirectory.z).normalized;
+                canMove = movementDirectory.z != 0 && !Physics.CapsuleCast(transform.position, transform.position + Vector3.up * playerHeight, playerRadius, movementDirectoryZ, moveDistance);
+                if (canMove)
+                {
+                    movementDirectory = movementDirectoryZ;
+                }
+            }
+        }
+
+        if (canMove)
+        {
+            transform.position += movementDirectory * moveDistance;
+        }
+
+        isWailking = movementDirectory != Vector3.zero;
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, movementDirectory, Time.deltaTime * rotateSpeed);
     }
 
     private void HandleMovement()
