@@ -1,6 +1,7 @@
+using Unity.Netcode;
 using UnityEngine;
 
-public class KitchenObject : MonoBehaviour
+public class KitchenObject : NetworkBehaviour
 {
     // Start is called before the first frame update
     [SerializeField] private KitchenObjectFactory kitchenObjectFactory;
