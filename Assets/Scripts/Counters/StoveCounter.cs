@@ -32,7 +32,7 @@ public class StoveCounter : BaseCounter, IHasProgress
 
     private void Start()
     {
-        // currentState = State.Idle;
+        currentState.Value = State.Idle;
     }
 
     public override void OnNetworkSpawn()
@@ -151,9 +151,8 @@ public class StoveCounter : BaseCounter, IHasProgress
                 {
                     if (plateKitchenObject != null && plateKitchenObject.TryAddIngredient(GetKitchenObject().GetKitchenObjectFactory()))
                     {
-                        GetKitchenObject().DestroySelf();
-
-                        currentState.Value = State.Idle;
+                        KitchenObject.DestroyKitchenObject(GetKitchenObject());
+                        SetStateIdleServerRpc();
                     }
                 }
             }

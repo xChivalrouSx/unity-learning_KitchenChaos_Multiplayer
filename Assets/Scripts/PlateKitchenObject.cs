@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlateKitchenObject : KitchenObject
@@ -27,14 +28,30 @@ public class PlateKitchenObject : KitchenObject
         {
             return false;
         }
+
+        TryAddIngredientServerRpc(
+            KitchenGameMultiplayer.Instance.GetKitchenObjectFactoryIndex(kitchenObjectFactory)
+                );
+
+        return true;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void TryAddIngredientServerRpc(int index)
+    {
+        TryAddIngredientClientRpc(index);
+    }
+
+    [ClientRpc]
+    private void TryAddIngredientClientRpc(int index)
+    {
+        KitchenObjectFactory kitchenObjectFactory = KitchenGameMultiplayer.Instance.GetKitchenObjectFactoryFromIndex(index);
         kitchenObjectFactories.Add(kitchenObjectFactory);
 
         OnIngredientAdded?.Invoke(this, new IngredientEventArgs()
         {
             kitchenObjectFatory = kitchenObjectFactory
         });
-
-        return true;
     }
 
     public List<KitchenObjectFactory> GetKitchenObjectFactories()
