@@ -30,11 +30,6 @@ public class StoveCounter : BaseCounter, IHasProgress
     private FryingRecpieFactory fryingRecpieFactory;
     private BurningRecipeFactory burningRecipeFactory;
 
-    private void Start()
-    {
-        currentState.Value = State.Idle;
-    }
-
     public override void OnNetworkSpawn()
     {
         fryingTimer.OnValueChanged += FryingTimer_OnValueChange;
@@ -113,6 +108,7 @@ public class StoveCounter : BaseCounter, IHasProgress
                         KitchenObject.DestroyKitchenObject(GetKitchenObject());
                         KitchenObject.SpawnKitchenObject(burningRecipeFactory.output, this);
                         currentState.Value = State.Burned;
+
                     }
                     break;
                 case State.Burned:
