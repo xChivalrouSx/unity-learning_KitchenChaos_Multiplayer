@@ -29,7 +29,11 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
 
     public override void OnNetworkSpawn()
     {
-        if (IsOwner) { LocalInstance = this; }
+        if (IsOwner)
+        {
+            LocalInstance = this;
+            KitchenChaosGameManager.Instance.SetReadyToLocalPlayer();
+        }
 
         transform.position = spawnPositionList[(int)OwnerClientId];
         OnAnyPlayerSpawned?.Invoke(this, EventArgs.Empty);
