@@ -32,7 +32,6 @@ public class Player : NetworkBehaviour, IKitchenObjectParent
         if (IsOwner)
         {
             LocalInstance = this;
-            KitchenChaosGameManager.Instance.SetReadyToLocalPlayer();
         }
 
         transform.position = spawnPositionList[(int)OwnerClientId];

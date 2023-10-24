@@ -6,17 +6,20 @@ public class TestingNetcodeUI : MonoBehaviour
 {
     [SerializeField] private Button startHostButton;
     [SerializeField] private Button startClientButton;
+    [SerializeField] private GameObject prepareUI;
 
     private void Awake()
     {
         startHostButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartHost();
+            prepareUI.SetActive(true);
             Hide();
         });
         startClientButton.onClick.AddListener(() =>
         {
             NetworkManager.Singleton.StartClient();
+            prepareUI.SetActive(true);
             Hide();
         });
     }
