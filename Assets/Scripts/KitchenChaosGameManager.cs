@@ -52,6 +52,17 @@ public class KitchenChaosGameManager : NetworkBehaviour
     {
         state.OnValueChanged += State_OnValueChanged;
         isGamePaused.OnValueChanged += IsGamePaused_OnValueChanged;
+
+        if (IsServer)
+        {
+            NetworkManager.Singleton.OnClientDisconnectCallback += NetworkManager_OnClientDisconnectCallback;
+        }
+    }
+
+    private void NetworkManager_OnClientDisconnectCallback(ulong clientId)
+    {
+        playerPauseDictionary.Remove(clientId);
+        TestGamePausedState();
     }
 
     private void IsGamePaused_OnValueChanged(bool previousValue, bool newValue)
