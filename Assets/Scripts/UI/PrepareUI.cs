@@ -18,7 +18,7 @@ public class PrepareUI : MonoBehaviour
 
     private void Start()
     {
-        Hide();
+        // Hide();
     }
 
     private void Hide()
