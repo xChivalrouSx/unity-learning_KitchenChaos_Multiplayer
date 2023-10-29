@@ -11,23 +11,40 @@ public class KitchenGameMultiplayer : NetworkBehaviour
 
     public event EventHandler OnTryingToJoinGame;
     public event EventHandler OnFailToJoinGame;
+    public event EventHandler OnPLayerDataNetworkListChanged;
 
     [SerializeField] private KitchenObjectListFactory kitchenObjectListFactories;
+
+    private NetworkList<PlayerData> playerDataNetworkList;
 
     private void Awake()
     {
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        playerDataNetworkList = new NetworkList<PlayerData>();
+        playerDataNetworkList.OnListChanged += PlayerDataNetworkList_OnListChanged;
+    }
+
+    private void PlayerDataNetworkList_OnListChanged(NetworkListEvent<PlayerData> changeEvent)
+    {
+        OnPLayerDataNetworkListChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void StartHost(GameObject prepareUI = null)
     {
         NetworkManager.Singleton.ConnectionApprovalCallback += NetworkManager_ConnectionApprovalCallback;
+        NetworkManager.Singleton.OnClientConnectedCallback += NetworkManager_OnClientConnectedCallback;
         NetworkManager.Singleton.StartHost();
         if (prepareUI != null)
         {
             prepareUI.SetActive(true);
         }
+    }
+
+    private void NetworkManager_OnClientConnectedCallback(ulong clientId)
+    {
+        playerDataNetworkList.Add(new PlayerData { clientId = clientId });
     }
 
     private void NetworkManager_ConnectionApprovalCallback(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
@@ -123,6 +140,16 @@ public class KitchenGameMultiplayer : NetworkBehaviour
         kitchenObjectNetworkObjectReference.TryGet(out NetworkObject kitchenObjectNetworkObject);
         KitchenObject kitchenObject = kitchenObjectNetworkObject.GetComponent<KitchenObject>();
         kitchenObject.ClearKitchenObjectOnParent();
+    }
+
+    public bool IsPlayerIndexConnected(int playerIndex)
+    {
+        return playerIndex < playerDataNetworkList.Count;
+    }
+
+    public PlayerData GetPlayerDataFromPlayerIndex(int playedIndex)
+    {
+        return playerDataNetworkList[playedIndex];
     }
 
 }
