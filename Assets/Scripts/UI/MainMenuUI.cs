@@ -16,7 +16,7 @@ public class MainMenuUI : MonoBehaviour
 
     private void PlayClick()
     {
-        Loader.Load(Loader.Scene.GameScene);
+        Loader.Load(Loader.Scene.LobbyScene);
         // SceneManager.LoadScene(1);
     }
 

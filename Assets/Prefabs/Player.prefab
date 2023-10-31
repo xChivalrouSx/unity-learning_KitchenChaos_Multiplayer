@@ -114,6 +114,7 @@ MonoBehaviour:
   - {x: 8, y: 0, z: 0}
   - {x: 5, y: 0, z: -2}
   - {x: 8, y: 0, z: -2}
+  playerVisual: {fileID: 6567219466398336616}
 --- !u!114 &-3622062474640015534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -244,6 +245,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 8859790372790959628}
+    - targetCorrespondingSourceObject: {fileID: 3294758251327466535, guid: 1c5dda3c7cd3cf742afcade5419faeab,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6567219466398336616}
   m_SourcePrefab: {fileID: 100100000, guid: 1c5dda3c7cd3cf742afcade5419faeab, type: 3}
 --- !u!4 &5984864761364659028 stripped
 Transform:
@@ -305,3 +310,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TransitionStateInfoList: []
   m_Animator: {fileID: 9053103699937965140}
+--- !u!114 &6567219466398336616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5984864761364659031}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7e5c6bac611a124bab6e9850b47bda8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  headMeshRenderer: {fileID: 5984864762944882854}
+  bodyMeshRenderer: {fileID: 5984864761520983551}
+--- !u!23 &5984864761520983551 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3294758251441920655, guid: 1c5dda3c7cd3cf742afcade5419faeab,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131004155694782320}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5984864762944882854 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3294758250785316822, guid: 1c5dda3c7cd3cf742afcade5419faeab,
+    type: 3}
+  m_PrefabInstance: {fileID: 9131004155694782320}
+  m_PrefabAsset: {fileID: 0}
