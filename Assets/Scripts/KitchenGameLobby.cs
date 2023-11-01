@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using Unity.Services.Authentication;
 using Unity.Services.Core;
 using Unity.Services.Lobbies;
@@ -8,8 +10,15 @@ public class KitchenGameLobby : MonoBehaviour
 {
     public static KitchenGameLobby Instance { get; private set; }
 
+    public event EventHandler<OnLobbyListChangeEventArgs> OnLobyListChanged;
+    public class OnLobbyListChangeEventArgs : EventArgs
+    {
+        public List<Lobby> lobbyList;
+    }
+
     private Lobby joinedLobby;
     private float heartBeatTimer;
+    private float listLobiesTimer;
 
     private void Awake()
     {
@@ -22,6 +31,20 @@ public class KitchenGameLobby : MonoBehaviour
     private void Update()
     {
         HandleHearybeat();
+        HandlePeriodicListLobies();
+    }
+
+    private void HandlePeriodicListLobies()
+    {
+        if (joinedLobby == null && AuthenticationService.Instance.IsSignedIn)
+        {
+            listLobiesTimer -= Time.deltaTime;
+            if (listLobiesTimer <= 0f)
+            {
+                listLobiesTimer = 3f;
+                ListLobbies();
+            }
+        }
     }
 
     private void HandleHearybeat()
@@ -43,12 +66,31 @@ public class KitchenGameLobby : MonoBehaviour
         return joinedLobby != null && joinedLobby.HostId == AuthenticationService.Instance.PlayerId;
     }
 
+    private async void ListLobbies()
+    {
+        try
+        {
+            QueryLobbiesOptions options = new QueryLobbiesOptions
+            {
+                Filters = new List<QueryFilter> {
+                new QueryFilter(QueryFilter.FieldOptions.AvailableSlots, "0", QueryFilter.OpOptions.GT)
+            }
+            };
+            QueryResponse queryResponse = await LobbyService.Instance.QueryLobbiesAsync(options);
+            OnLobyListChanged?.Invoke(this, new OnLobbyListChangeEventArgs { lobbyList = queryResponse.Results });
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
     private async void InitializeUnityAuthentication()
     {
         if (UnityServices.State != ServicesInitializationState.Initialized)
         {
             InitializationOptions options = new InitializationOptions();
-            options.SetProfile(Random.Range(0, 10000).ToString());
+            options.SetProfile(UnityEngine.Random.Range(0, 10000).ToString());
             await UnityServices.InitializeAsync(options);
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
@@ -87,6 +129,19 @@ public class KitchenGameLobby : MonoBehaviour
         try
         {
             joinedLobby = await LobbyService.Instance.JoinLobbyByCodeAsync(code);
+            KitchenGameMultiplayer.Instance.StartClient();
+        }
+        catch (LobbyServiceException ex)
+        {
+            Debug.Log(ex);
+        }
+    }
+
+    public async void JoinWithId(string id)
+    {
+        try
+        {
+            joinedLobby = await LobbyService.Instance.JoinLobbyByIdAsync(id);
             KitchenGameMultiplayer.Instance.StartClient();
         }
         catch (LobbyServiceException ex)
